@@ -1,5 +1,5 @@
 <?php 
-    $sexo = ''; // Valor padrão
+    $sexo = '';
 
     if (isset($_POST['submit'])) {
         include_once('config.php');
@@ -17,8 +17,7 @@
         $result = mysqli_query($conexao, "INSERT INTO usuarios(nome, senha, email, telefone, sexo, data_nasc, cidade, estado, endereco) VALUES ('$nome', '$senha','$email', '$telefone', '$sexo','$data','$cidade','$estado','$endereco')");
     
         header('Location: telaLogin.php');
-
-        
+ 
     }
 
 ?>

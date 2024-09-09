@@ -13,7 +13,13 @@ if ((!isset($_SESSION['email']) == true) and (!isset($_SESSION['senha']) == true
 
 $logado = $_SESSION['email'];
 
-$sql = "SELECT * FROM usuarios ORDER BY id DESC";
+if (!empty($_GET['search'])) {
+    $data = $_GET['search'];
+
+    $sql = "SELECT * FROM usuarios WHERE id LIKE '%$data%' or nome LIKE '%$data%' or email LIKE '%$data%' ORDER BY id  DESC";
+} else {
+    $sql = "SELECT * FROM usuarios ORDER BY id DESC";
+}
 
 $result = $conexao->query($sql);
 
@@ -27,8 +33,7 @@ $result = $conexao->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/css/sistemaStyle.css?v=1.0">
-    <!-- Option 1: Include in HTML -->
+    <link rel="stylesheet" href="assets/css/sistemaStyle.css?v=1.2">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
 
@@ -50,7 +55,13 @@ $result = $conexao->query($sql);
     <?php
     echo "<h1>Bem Vindo <u>$logado</u></h1>";
     ?>
-
+    <br>
+    <div class="box-search ">
+        <input type="search" name="" id="pesquisar" class="form-contro w-25" placeholder="   Pesquisar">
+        <button onclick="searchData()" class="btn-primary" id="botao">
+            <i class='bi bi-search'></i>
+        </button>
+    </div>
     <div class="m-5">
 
         <table class="table text-white table-bg">
@@ -70,27 +81,44 @@ $result = $conexao->query($sql);
                 </tr>
             </thead>
             <tbody>
-                <?php 
-                    while($user_data = mysqli_fetch_assoc($result)){
-                        echo "<tr>";
-                        echo ("<td>". $user_data['id']."</td>");
-                        echo ("<td>". $user_data['nome']."</td>");
-                        echo ("<td>". $user_data['email']."</td>");
-                        echo ("<td>". $user_data['senha']."</td>");
-                        echo ("<td>". $user_data['telefone']."</td>");
-                        echo ("<td>". $user_data['sexo']."</td>");
-                        echo ("<td>". $user_data['data_nasc']."</td>");
-                        echo ("<td>". $user_data['cidade']."</td>");
-                        echo ("<td>". $user_data['estado']."</td>");
-                        echo ("<td>". $user_data['endereco']."</td>");
-                        echo ("<td> <a href='edit.php?id=$user_data[id]' class='btn btn-primary btn-sm'><i class='bi bi-pencil'></i></a> 
-                        
-                                    <a href='delete.php?id=$user_data[id]' class='btn btn-danger btn-sm'><i class='bi bi-trash'></i></a></td>");
-                        echo "</tr>";
-                    }
+                <?php
+                while ($user_data = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo ("<td>" . $user_data['id'] . "</td>");
+                    echo ("<td>" . $user_data['nome'] . "</td>");
+                    echo ("<td>" . $user_data['email'] . "</td>");
+                    echo ("<td>" . $user_data['senha'] . "</td>");
+                    echo ("<td>" . $user_data['telefone'] . "</td>");
+                    echo ("<td>" . $user_data['sexo'] . "</td>");
+                    echo ("<td>" . $user_data['data_nasc'] . "</td>");
+                    echo ("<td>" . $user_data['cidade'] . "</td>");
+                    echo ("<td>" . $user_data['estado'] . "</td>");
+                    echo ("<td>" . $user_data['endereco'] . "</td>");
+                    echo ("<td>
+                                <div class='button-container'>
+                                        <div><a href='edit.php?id=$user_data[id]' class='btn btn-primary btn-sm'><i class='bi bi-pencil'></i></a></div>
+                                        <div><a href='delete.php?id=$user_data[id]' class='btn btn-danger btn-sm'><i class='bi bi-trash'></i></a></div>
+                                </div>
+                            </td>");
+                    echo "</tr>";
+                }
                 ?>
             </tbody>
         </table>
     </div>
-</body> 
+</body>
+
+<script>
+    var search = document.getElementById('pesquisar')
+    search.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            searchData()
+        }
+    })
+
+    function searchData() {
+        window.location = 'sistema.php?search=' + search.value
+    }
+</script>
+
 </html>

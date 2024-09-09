@@ -8,3 +8,24 @@ body{
     background: rgba(0, 0, 0, 0.3);
     border-radius: 15px 15px 0px 0px;
 }
+
+#botao{
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 15px;
+    height: 35px;
+    outline: none;
+}
+
+#pesquisar{
+    border-radius: 5px;
+    outline: none;
+    height: 35px;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+}
